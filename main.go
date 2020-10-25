@@ -1,13 +1,13 @@
 package main
 
 import (
-        "encoding/json"
-		"fmt"
-		"strconv"
-		"io/ioutil"
-		"log"
-		"net/http"
-		"time"
+	"encoding/json"
+	"fmt"
+	"strconv"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"time"
 )
 
 // Ticker struct with the amrrket info
