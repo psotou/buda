@@ -3,22 +3,22 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 )
 
 // Ticker struct with the amrrket info
 type Ticker struct {
-	MarketID	string	 `json:"market_id"`
-	LastPrice	[]string `json:"last_price"`
-	MinAsk	[]string `json:"min_ask"`
-	MaxBid	[]string `json:"max_bid"`
-	Volume	[]string `json:"volume"`
-	PriceVariation24H	string   `json:"price_variation_24h"`
-	PriceVariation7D	string   `json:"price_variation_7d"`	
+	MarketID          string   `json:"market_id"`
+	LastPrice         []string `json:"last_price"`
+	MinAsk            []string `json:"min_ask"`
+	MaxBid            []string `json:"max_bid"`
+	Volume            []string `json:"volume"`
+	PriceVariation24H string   `json:"price_variation_24h"`
+	PriceVariation7D  string   `json:"price_variation_7d"`
 }
 
 // TickerSingle creates a Ticker of type Ticker (which contains what's is int he above struct)
@@ -52,7 +52,7 @@ func main() {
 	if readErr != nil {
 		log.Fatal(readErr)
 	}
-	
+
 	ticker := TickerSingle{}
 	jsonErr := json.Unmarshal(body, &ticker)
 	if err != nil {
