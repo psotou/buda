@@ -13,12 +13,12 @@ import (
 // Ticker struct with the amrrket info
 type Ticker struct {
 	MarketID			string	 `json:"market_id"`
-	LastPrice         	[]string `json:"last_price"`
-	MinAsk            	[]string `json:"min_ask"`
-	MaxBid            	[]string `json:"max_bid"`
-	Volume           	[]string `json:"volume"`
-	PriceVariation24H 	string   `json:"price_variation_24h"`
-	PriceVariation7D  	string   `json:"price_variation_7d"`	
+	LastPrice			[]string `json:"last_price"`
+	MinAsk				[]string `json:"min_ask"`
+	MaxBid				[]string `json:"max_bid"`
+	Volume				[]string `json:"volume"`
+	PriceVariation24H	string   `json:"price_variation_24h"`
+	PriceVariation7D	string   `json:"price_variation_7d"`	
 }
 
 // TickerSingle creates a Ticker of type Ticker (which contains what's is int he above struct)
@@ -69,10 +69,10 @@ func main() {
 	var oneDayVariationPercent float64 = oneDayVariation * 100
 	var sevenDayVariationPercent float64 = sevenDayVariation * 100
 
-	fmt.Printf("Precio última transacción 	$ %s\n", ticker.Ticker.LastPrice[0])
-	fmt.Printf("Menor precio de venta 		$ %s\n", ticker.Ticker.MinAsk[0])
-	fmt.Printf("Máximo precio de compra 	$ %s\n", ticker.Ticker.MaxBid[0])
-	fmt.Printf("Variación últimas 24h 		%2.2f %%\n", oneDayVariationPercent)
-	fmt.Printf("Variación últimos 7d 		%2.2f %%\n", sevenDayVariationPercent)
-	fmt.Printf("Volumen criptomenda		%s\n", ticker.Ticker.Volume[0])
+	fmt.Printf("Precio última transacción	$ %s\n", ticker.Ticker.LastPrice[0])
+	fmt.Printf("Menor precio de venta		$ %s\n", ticker.Ticker.MinAsk[0])
+	fmt.Printf("Máximo precio de compra		$ %s\n", ticker.Ticker.MaxBid[0])
+	fmt.Printf("Variación últimas 24h		%2.2f %%\n", oneDayVariationPercent)
+	fmt.Printf("Variación últimos 7d		%2.2f %%\n", sevenDayVariationPercent)
+	fmt.Printf("Volumen criptomenda			%s\n", ticker.Ticker.Volume[0])
 }
