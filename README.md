@@ -8,4 +8,4 @@ The way we run the command is:
 $ ./buda <criptocurrency>
 ```
 
-Where  `criptocurrency` &isin; {btc, eth, ltc, bch}
+Where  `criptocurrency` &isin; {btc, eth, ltc, bch}. Remember that the path to the binary is GOBIN/
