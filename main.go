@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 )
@@ -28,7 +29,8 @@ type TickerSingle struct {
 
 func main() {
 
-	const url = "https://www.buda.com/api/v2/markets/btc-clp/ticker.json"
+	var url string
+	url = "https://www.buda.com/api/v2/markets/" + os.Args[1] + "-clp/ticker.json"
 
 	budaClient := http.Client{
 		Timeout: time.Second * 2, // Timeout after 2 seconds
@@ -70,9 +72,9 @@ func main() {
 	var sevenDayVariationPercent float64 = sevenDayVariation * 100
 
 	fmt.Printf("Precio última transacción	$ %s\n", ticker.Ticker.LastPrice[0])
-	fmt.Printf("Menor precio de venta	$ %s\n", ticker.Ticker.MinAsk[0])
-	fmt.Printf("Máximo precio de compra	$ %s\n", ticker.Ticker.MaxBid[0])
-	fmt.Printf("Variación últimas 24h	%2.2f %%\n", oneDayVariationPercent)
-	fmt.Printf("Variación últimos 7d	%2.2f %%\n", sevenDayVariationPercent)
+	fmt.Printf("Menor precio de venta		$ %s\n", ticker.Ticker.MinAsk[0])
+	fmt.Printf("Máximo precio de compra		$ %s\n", ticker.Ticker.MaxBid[0])
+	fmt.Printf("Variación últimas 24h		%2.2f %%\n", oneDayVariationPercent)
+	fmt.Printf("Variación últimos 7d		%2.2f %%\n", sevenDayVariationPercent)
 	fmt.Printf("Volumen criptomenda		%s\n", ticker.Ticker.Volume[0])
 }
