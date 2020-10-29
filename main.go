@@ -71,10 +71,10 @@ func main() {
 	var oneDayVariationPercent float64 = oneDayVariation * 100
 	var sevenDayVariationPercent float64 = sevenDayVariation * 100
 
-	fmt.Printf("Precio última transacción	$ %s\n", ticker.Ticker.LastPrice[0])
-	fmt.Printf("Menor precio de venta		$ %s\n", ticker.Ticker.MinAsk[0])
-	fmt.Printf("Máximo precio de compra		$ %s\n", ticker.Ticker.MaxBid[0])
-	fmt.Printf("Variación últimas 24h		%2.2f %%\n", oneDayVariationPercent)
-	fmt.Printf("Variación últimos 7d		%2.2f %%\n", sevenDayVariationPercent)
-	fmt.Printf("Volumen criptomenda		%s\n", ticker.Ticker.Volume[0])
+	fmt.Printf("Precio última última orden ejecutada    $ %s\n", ticker.Ticker.LastPrice[0])
+	fmt.Printf("Menor precio de venta		    	$ %s\n", ticker.Ticker.MinAsk[0])
+	fmt.Printf("Máximo precio de compra		    	$ %s\n", ticker.Ticker.MaxBid[0])
+	fmt.Printf("Variación últimas 24h		    	%2.2f %%\n", oneDayVariationPercent)
+	fmt.Printf("Variación últimos 7d		    	%2.2f %%\n", sevenDayVariationPercent)
+	fmt.Printf("Volumen criptomenda		        %s\n", ticker.Ticker.Volume[0])
 }
