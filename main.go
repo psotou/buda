@@ -1,69 +1,27 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
-	"net/http"
+	"go/buda/AuthBudaApi"
 	"os"
 	"strconv"
-	"time"
 )
 
-// Ticker struct with the amrrket info
-type Ticker struct {
-	MarketID          string   `json:"market_id"`
-	LastPrice         []string `json:"last_price"`
-	MinAsk            []string `json:"min_ask"`
-	MaxBid            []string `json:"max_bid"`
-	Volume            []string `json:"volume"`
-	PriceVariation24H string   `json:"price_variation_24h"`
-	PriceVariation7D  string   `json:"price_variation_7d"`
-}
-
-// TickerSingle creates a Ticker of type Ticker (which contains what's is int he above struct)
-type TickerSingle struct {
-	Ticker Ticker `json:"ticker"`
-}
-
 func main() {
+	var key string = os.Getenv("KEY")
+	var secret string = os.Getenv("SECRET")
+	var crypto string = os.Args[1] + "-clp"
 
-	var url string
-	url = "https://www.buda.com/api/v2/markets/" + os.Args[1] + "-clp/ticker.json"
-
-	budaClient := http.Client{
-		Timeout: time.Second * 2, // Timeout after 2 seconds
-	}
-
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	budaClient, err := AuthBudaApi.NewAPIClient(key, secret)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	res, getErr := budaClient.Do(req)
-	if getErr != nil {
-		log.Fatal(getErr)
-	}
+	market, _ := budaClient.GetTickerByMarket(crypto)
+	volume, _ := budaClient.GetVolumeByMarket(crypto)
 
-	if res.Body != nil {
-		defer res.Body.Close()
-	}
-
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		log.Fatal(readErr)
-	}
-
-	ticker := TickerSingle{}
-	jsonErr := json.Unmarshal(body, &ticker)
-	if err != nil {
-		fmt.Println(jsonErr)
-		return
-	}
-
-	var oneDayVariationStr string = ticker.Ticker.PriceVariation24H
-	var sevenDayVariationStr string = ticker.Ticker.PriceVariation7D
+	var oneDayVariationStr string = market.PriceVariation24H
+	var sevenDayVariationStr string = market.PriceVariation7D
 
 	oneDayVariation, _ := strconv.ParseFloat(oneDayVariationStr, 64)
 	sevenDayVariation, _ := strconv.ParseFloat(sevenDayVariationStr, 64)
@@ -71,10 +29,15 @@ func main() {
 	var oneDayVariationPercent float64 = oneDayVariation * 100
 	var sevenDayVariationPercent float64 = sevenDayVariation * 100
 
-	fmt.Printf("Precio última última orden ejecutada    $ %s\n", ticker.Ticker.LastPrice[0])
-	fmt.Printf("Menor precio de venta		    	$ %s\n", ticker.Ticker.MinAsk[0])
-	fmt.Printf("Máximo precio de compra		    	$ %s\n", ticker.Ticker.MaxBid[0])
-	fmt.Printf("Variación últimas 24h		    	%2.2f %%\n", oneDayVariationPercent)
-	fmt.Printf("Variación últimos 7d		    	%2.2f %%\n", sevenDayVariationPercent)
-	fmt.Printf("Volumen criptomenda		        %s\n", ticker.Ticker.Volume[0])
+	fmt.Printf("Precio última orden ejecutada  $ %s\n", market.LastPrice[0])
+	fmt.Printf("Menor precio de venta          $ %s\n", market.MinAsk[0])
+	fmt.Printf("Máximo precio de compra        $ %s\n", market.MaxBid[0])
+	fmt.Printf("Variación últimas 24h          %2.2f %%\n", oneDayVariationPercent)
+	fmt.Printf("Variación últimos 7d           %2.2f %%\n", sevenDayVariationPercent)
+	fmt.Printf("Volumen criptomenda            %s\n", market.Volume[0])
+
+	fmt.Printf("Volumen venta últimas 24h      %s\n", volume.AskVolumen24h[0])
+	fmt.Printf("Volumen compra últimas 24h     %s\n", volume.BidVolumen24h[0])
+	// fmt.Printf("Volumen venta últimos 7d       %s\n", volume.AskVolumen7d[0])
+	// fmt.Printf("Volumen compra últimos 7d      %s\n", volume.BidVolumen7d[0])
 }
