@@ -1,4 +1,4 @@
-package AuthBudaApi
+package buda
 
 import (
 	"crypto/hmac"

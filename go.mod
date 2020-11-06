@@ -1,3 +1,3 @@
-module go/buda
+module src/buda-app
 
 go 1.15
