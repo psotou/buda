@@ -5,7 +5,7 @@ import (
 	"os"
 	"src/buda-app/buda"
 	//"strconv"
-    //"strings"
+	//"strings"
 )
 
 func main() {
@@ -19,7 +19,6 @@ func main() {
 		panic(err)
 	}
 
-    orders, _ := budaClient.GetOrdersByMarket(crypto)
+	fmt.Println(budaClient.GetOrdersByMarket(crypto))
 
-    fmt.Println(orders)
 }
