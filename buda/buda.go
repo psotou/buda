@@ -14,9 +14,13 @@ import (
 	"time"
 )
 
-const BaseURL = "https://www.buda.com/api/v2"
-const MarketTickerEndpoint = "/markets/%s/ticker"
-const VolumeEndpoint = "/markets/%s/volume"
+const (
+    BaseURL = "https://www.buda.com/api/v2"
+    MarketTickerEndpoint = "/markets/%s/ticker" 
+    VolumeEndpoint = "/markets/%s/volume"
+    OrdersEndpoint = "/market/%s/orders"
+    ElementsPerPage = "50"
+)
 
 type APIClient struct {
 	Key    string
@@ -48,6 +52,38 @@ type Volume struct {
 
 type VolumeSingle struct {
 	Volume Volume `json:"volume"`
+}
+
+type Metadata struct {
+    CurrentPage int `json:"current_page"`
+    TotalCount int `json:"total_count"`
+    TotalPages int `json:"total_pages"`
+}
+
+type Order struct {
+    ID int `json:"id"`
+    Type string `json:"type"`
+    State string `json:"state"`
+    CreatedAt time.Time `json:"created_at`
+    MarketID string `json:"market_id"`
+    AccountID int `json:"account_id"`
+    FeeCurrency string `json:"fee_currency"`
+    PriceType string `json:"price_type"`
+    Limit []string `json:"limit"`
+    Amount []string `json:"amount"`
+    OriginalAmount []string `json:"original_amount"`
+    TradedAmount []string `json:"traded_amount"`
+    TotalExchanged []string `json:"total_exchanged"`
+    PaidFee []string `json:"paid_fee"`
+}
+
+type OrderSingle struct {
+    Order Order `json:"order"`
+}
+
+type Orders struct {
+    Orders []Order `json:"orders"`
+    Meta Metadata `json:"meta"`
 }
 
 func (client *APIClient) SignRequest(params ...string) string {
@@ -147,4 +183,55 @@ func (client *APIClient) GetVolumeByMarket(marketId string) (*Volume, error) {
 	}
 
 	return &volume.Volume, nil
+}
+
+func (client *APIClient) GetOrdersByMarket(marketId string) ([]Order, error) {
+    var orders Orders
+    var ret []Order
+
+    data, err := client.Get(fmt.Sprintf(OrdersEndpoint + "?page=1&per=" + ElementsPerPage, marketId), true)
+    if err != nil {
+        return nil, err
+    }
+
+    err = json.Unmarshal(data, &orders)
+    if err != nil {
+        return nil, err
+    }
+
+    resc, errc := make(chan []Order), make(chan error)
+    ret = append(ret, orders.Orders...)
+
+    if orders.Meta.TotalPages > 1 {
+        for i := orders.Meta.CurrentPage + 1; i <= orders.Meta.TotalPages; i++ {
+            go func(i int) {
+                data, err := client.Get(fmt.Sprintf(OrdersEndpoint + fmt.Sprintf("?page=%d", i) + "&per=" + ElementsPerPage, marketId), true)
+                if err != nil {
+                    errc <- err
+                    return
+                }
+                err = json.Unmarshal(data, &orders)
+                if err != nil {
+                    errc <- err
+                    return
+                }
+                resc <- orders.Orders
+            }(i)
+        }
+
+        for i := orders.Meta.CurrentPage + 1; i <= orders.Meta.TotalPages; i++ {
+            select {
+            case res := <-resc:
+                {
+                    ret = append(ret, res...)
+                }
+            case res := <-errc:
+                {
+                    return nil, err
+                }
+            }
+        }
+    }
+
+    return ret, nil
 }
