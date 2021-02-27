@@ -107,16 +107,17 @@ func main() {
 	var priceVar24hPerLTC float64 = priceVar24hLTC * 100
 	var priceVar7dPerLTC float64 = priceVar7dLTC * 100
 
-	fmt.Println("------------------------------------------------------------------------------------------")
+	fmt.Println("-------------------------------------------------------------------------------------------")
 	fmt.Println("                                       MERCADO BUDA                                       ")
-	fmt.Println("------------------------------------------------------------------------------------------")
-	fmt.Println("                       BTC               ETH              BCH             LTC")
-	fmt.Printf("Precio última orden    %.1f CLP    %.1f CLP    %.1f CLP    %.1f CLP\n", lastPriceBTC, lastPriceETH, lastPriceBCH, lastPriceLTC)
-	fmt.Printf("Min precio de venta    %.1f CLP    %.1f CLP    %.1f CLP    %.1f CLP\n", minVentaBTC, minVentaETH, minVentaBCH, minVentaLTC)
-	fmt.Printf("Max precio de compra   %.1f CLP    %.1f CLP    %.1f CLP    %.1f CLP\n", maxCompraBTC, maxCompraETH, maxCompraBCH, maxCompraLTC)
-	fmt.Printf("SPREAD                 %.1f CLP      %.1f CLP       %.1f CLP      %.1f CLP\n", spreadBTC, spreadETH, spreadBCH, spreadLTC)
-	fmt.Printf("Variación 24h          %2.2f %%            %2.2f %%          %2.2f %%          %2.2f %%\n", priceVar24hPerBTC, priceVar24hPerETH, priceVar24hPerBCH, priceVar24hPerLTC)
-	fmt.Printf("Variación 7d           %2.2f %%          %2.2f %%         %2.2f %%        %2.2f %%\n", priceVar7dPerBTC, priceVar7dPerETH, priceVar7dPerBCH, priceVar7dPerLTC)
-	fmt.Printf("Volumen venta 24h      %3.2f (%2.1f %%)    %3.2f (%2.1f %%)  %3.2f (%2.1f %%)  %3.2f (%2.1f %%)\n", volVentaBTC, volVentaPerBTC, volVentaETH, volVentaPerETH, volVentaBCH, volVentaPerBCH, volVentaLTC, volVentaPerLTC)
-	fmt.Printf("Volumen compra 24h     %3.2f (%2.1f %%)    %3.2f (%2.1f %%)  %3.2f (%2.1f %%)  %3.2f (%2.1f %%)\n", volCompraBTC, volCompraPerBTC, volCompraETH, volCompraPerETH, volCompraBCH, volCompraPerBCH, volCompraLTC, volCompraPerLTC)
+	fmt.Println("-------------------------------------------------------------------------------------------")
+	fmt.Println("                         BTC                ETH                BCH               LTC")
+	fmt.Printf("Precio última orden    %10.f CLP    %10.f CLP    %10.f CLP    %10.f CLP\n", lastPriceBTC, lastPriceETH, lastPriceBCH, lastPriceLTC)
+	fmt.Printf("Min precio de venta    %10.f CLP    %10.f CLP    %10.f CLP    %10.f CLP\n", minVentaBTC, minVentaETH, minVentaBCH, minVentaLTC)
+	fmt.Printf("Max precio de compra   %10.f CLP    %10.f CLP    %10.f CLP    %10.f CLP\n", maxCompraBTC, maxCompraETH, maxCompraBCH, maxCompraLTC)
+	fmt.Printf("SPREAD                 %10.f CLP    %10.f CLP    %10.f CLP    %10.f CLP\n", spreadBTC, spreadETH, spreadBCH, spreadLTC)
+	fmt.Printf("Variación 24h          %10.2f %%      %10.2f %%      %10.2f %%      %10.2f %%\n", priceVar24hPerBTC, priceVar24hPerETH, priceVar24hPerBCH, priceVar24hPerLTC)
+	fmt.Printf("Variación 7d           %10.1f %%      %10.1f %%      %10.1f %%      %10.1f %%\n", priceVar7dPerBTC, priceVar7dPerETH, priceVar7dPerBCH, priceVar7dPerLTC)
+	fmt.Printf("Volumen venta 24h      %4.1f (%2.1f %%)    %4.1f (%2.1f %%)     %4.1f (%2.1f %%)    %4.1f (%2.1f %%)\n", volVentaBTC, volVentaPerBTC, volVentaETH, volVentaPerETH, volVentaBCH, volVentaPerBCH, volVentaLTC, volVentaPerLTC)
+	fmt.Printf("Volumen compra 24h     %4.1f (%2.1f %%)    %4.1f (%2.1f %%)     %4.1f (%2.1f %%)    %4.1f (%2.1f %%)\n", volCompraBTC, volCompraPerBTC, volCompraETH, volCompraPerETH, volCompraBCH, volCompraPerBCH, volCompraLTC, volCompraPerLTC)
+	fmt.Println("-------------------------------------------------------------------------------------------")
 }
