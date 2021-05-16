@@ -185,54 +185,54 @@ func (client *APIClient) GetVolumeByMarket(marketId string) (*Volume, error) {
 	return &volume.Volume, nil
 }
 
-func (client *APIClient) GetOrdersByMarket(marketId string) ([]Order, error) {
-	var orders Orders
-	var ret []Order
+// func (client *APIClient) GetOrdersByMarket(marketId string) ([]Order, error) {
+// 	var orders Orders
+// 	var ret []Order
 
-	data, err := client.Get(fmt.Sprintf(OrdersEndpoint+"?page=1&per="+ElementsPerPage, marketId), true)
-	if err != nil {
-		return nil, err
-	}
+// 	data, err := client.Get(fmt.Sprintf(OrdersEndpoint+"?page=1&per="+ElementsPerPage, marketId), true)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	err = json.Unmarshal(data, &orders)
-	if err != nil {
-		return nil, err
-	}
+// 	err = json.Unmarshal(data, &orders)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	resc, errc := make(chan []Order), make(chan error)
+// 	resc, errc := make(chan []Order), make(chan error)
 
-	ret = append(ret, orders.Orders...)
+// 	ret = append(ret, orders.Orders...)
 
-	if orders.Meta.TotalPages > 1 {
-		for i := orders.Meta.CurrentPage + 1; i <= orders.Meta.TotalPages; i++ {
-			go func(i int) {
-				data, err := client.Get(fmt.Sprintf(OrdersEndpoint+fmt.Sprintf("?page=%d", i)+"&per="+ElementsPerPage, marketId), true)
-				if err != nil {
-					errc <- err
-					return
-				}
-				err = json.Unmarshal(data, &orders)
-				if err != nil {
-					errc <- err
-					return
-				}
-				resc <- orders.Orders
-			}(i)
-		}
+// 	if orders.Meta.TotalPages > 1 {
+// 		for i := orders.Meta.CurrentPage + 1; i <= orders.Meta.TotalPages; i++ {
+// 			go func(i int) {
+// 				data, err := client.Get(fmt.Sprintf(OrdersEndpoint+fmt.Sprintf("?page=%d", i)+"&per="+ElementsPerPage, marketId), true)
+// 				if err != nil {
+// 					errc <- err
+// 					return
+// 				}
+// 				err = json.Unmarshal(data, &orders)
+// 				if err != nil {
+// 					errc <- err
+// 					return
+// 				}
+// 				resc <- orders.Orders
+// 			}(i)
+// 		}
 
-		for i := orders.Meta.CurrentPage + 1; i <= orders.Meta.TotalPages; i++ {
-			select {
-			case res := <-resc:
-				{
-					ret = append(ret, res...)
-				}
-			case err := <-errc:
-				{
-					return nil, err
-				}
-			}
-		}
-	}
+// 		for i := orders.Meta.CurrentPage + 1; i <= orders.Meta.TotalPages; i++ {
+// 			select {
+// 			case res := <-resc:
+// 				{
+// 					ret = append(ret, res...)
+// 				}
+// 			case err := <-errc:
+// 				{
+// 					return nil, err
+// 				}
+// 			}
+// 		}
+// 	}
 
-	return ret, nil
-}
+// 	return ret, nil
+// }
