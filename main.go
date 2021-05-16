@@ -117,7 +117,7 @@ func main() {
 	fmt.Printf("SPREAD                 %10.f CLP    %10.f CLP    %10.f CLP    %10.f CLP\n", spreadBTC, spreadETH, spreadBCH, spreadLTC)
 	fmt.Printf("Variación 24h          %10.2f %%      %10.2f %%      %10.2f %%      %10.2f %%\n", priceVar24hPerBTC, priceVar24hPerETH, priceVar24hPerBCH, priceVar24hPerLTC)
 	fmt.Printf("Variación 7d           %10.1f %%      %10.1f %%      %10.1f %%      %10.1f %%\n", priceVar7dPerBTC, priceVar7dPerETH, priceVar7dPerBCH, priceVar7dPerLTC)
-	fmt.Printf("Volumen venta 24h      %4.1f (%2.1f %%)    %4.1f (%2.1f %%)     %4.1f (%2.1f %%)    %4.1f (%2.1f %%)\n", volVentaBTC, volVentaPerBTC, volVentaETH, volVentaPerETH, volVentaBCH, volVentaPerBCH, volVentaLTC, volVentaPerLTC)
-	fmt.Printf("Volumen compra 24h     %4.1f (%2.1f %%)    %4.1f (%2.1f %%)     %4.1f (%2.1f %%)    %4.1f (%2.1f %%)\n", volCompraBTC, volCompraPerBTC, volCompraETH, volCompraPerETH, volCompraBCH, volCompraPerBCH, volCompraLTC, volCompraPerLTC)
+	fmt.Printf("Volumen venta 24h      %5.1f (%2.1f %%)    %5.1f (%2.1f %%)    %5.1f (%2.1f %%)    %5.1f (%2.1f %%)\n", volVentaBTC, volVentaPerBTC, volVentaETH, volVentaPerETH, volVentaBCH, volVentaPerBCH, volVentaLTC, volVentaPerLTC)
+	fmt.Printf("Volumen compra 24h     %5.1f (%2.1f %%)    %5.1f (%2.1f %%)    %5.1f (%2.1f %%)    %5.1f (%2.1f %%)\n", volCompraBTC, volCompraPerBTC, volCompraETH, volCompraPerETH, volCompraBCH, volCompraPerBCH, volCompraLTC, volCompraPerLTC)
 	fmt.Println("-------------------------------------------------------------------------------------------")
 }
