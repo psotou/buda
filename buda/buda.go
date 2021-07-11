@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -18,7 +18,7 @@ const (
 	BaseURL              = "https://www.buda.com/api/v2"
 	MarketTickerEndpoint = "/markets/%s/ticker"
 	VolumeEndpoint       = "/markets/%s/volume"
-	OrdersEndpoint       = "/market/%s/orders"
+	BalancesEndpoint     = "/balances"
 	ElementsPerPage      = "20"
 )
 
@@ -60,30 +60,20 @@ type Metadata struct {
 	TotalPages  int `json:"total_pages"`
 }
 
-type Order struct {
-	ID             int       `json:"id"`
-	Type           string    `json:"type"`
-	State          string    `json:"state"`
-	CreatedAt      time.Time `json:"created_at"`
-	MarketID       string    `json:"market_id"`
-	AccountID      int       `json:"account_id"`
-	FeeCurrency    string    `json:"fee_currency"`
-	PriceType      string    `json:"price_type"`
-	Limit          []string  `json:"limit"`
-	Amount         []string  `json:"amount"`
-	OriginalAmount []string  `json:"original_amount"`
-	TradedAmount   []string  `json:"traded_amount"`
-	TotalExchanged []string  `json:"total_exchanged"`
-	PaidFee        []string  `json:"paid_fee"`
+type Balance struct {
+	ID     string   `json:"id"`
+	Amount []string `json:"amount"`
+	// AvailableAmount       []string `json:"available_amount"`
+	// FrozenAmount          []string `json:"frozen_amount"`
+	// PendingWithdrawAmount []string `json:"pending_withdraw_amount"`
 }
 
-type OrderSingle struct {
-	Order Order `json:"order"`
+type Balances struct {
+	Balances []Balance `json:"balances"`
 }
 
-type Orders struct {
-	Orders []Order  `json:"orders"`
-	Meta   Metadata `json:"meta"`
+type BalanceSingle struct {
+	Balance Balance `json:"balance"`
 }
 
 func (client *APIClient) SignRequest(params ...string) string {
@@ -100,7 +90,7 @@ func (client *APIClient) AuthenticatedRequest(request *http.Request) (*http.Requ
 	case "POST":
 		{
 			var body []byte
-			body, err := ioutil.ReadAll(request.Body)
+			body, err := io.ReadAll(request.Body)
 			if err != nil {
 				return nil, err
 			}
@@ -129,6 +119,7 @@ func (client *APIClient) FormatResource(resource string) string {
 
 func (client *APIClient) Get(resource string, private bool) ([]byte, error) {
 	req, err := http.NewRequest("GET", client.FormatResource(resource), nil)
+	// req, err := http.Get(client.FormatResource(resource))
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +136,7 @@ func (client *APIClient) Get(resource string, private bool) ([]byte, error) {
 		return nil, err
 	}
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -185,54 +176,34 @@ func (client *APIClient) GetVolumeByMarket(marketId string) (*Volume, error) {
 	return &volume.Volume, nil
 }
 
-// func (client *APIClient) GetOrdersByMarket(marketId string) ([]Order, error) {
-// 	var orders Orders
-// 	var ret []Order
+func (client *APIClient) GetBalances() ([]Balance, error) {
+	var balances Balances
 
-// 	data, err := client.Get(fmt.Sprintf(OrdersEndpoint+"?page=1&per="+ElementsPerPage, marketId), true)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	data, err := client.Get(BalancesEndpoint, true)
+	if err != nil {
+		return nil, err
+	}
 
-// 	err = json.Unmarshal(data, &orders)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	err = json.Unmarshal(data, &balances)
+	if err != nil {
+		return nil, err
+	}
 
-// 	resc, errc := make(chan []Order), make(chan error)
+	return balances.Balances, nil
+}
 
-// 	ret = append(ret, orders.Orders...)
+func (client *APIClient) GetBalanceByCurrency(currency string) (*Balance, error) {
+	var balance BalanceSingle
 
-// 	if orders.Meta.TotalPages > 1 {
-// 		for i := orders.Meta.CurrentPage + 1; i <= orders.Meta.TotalPages; i++ {
-// 			go func(i int) {
-// 				data, err := client.Get(fmt.Sprintf(OrdersEndpoint+fmt.Sprintf("?page=%d", i)+"&per="+ElementsPerPage, marketId), true)
-// 				if err != nil {
-// 					errc <- err
-// 					return
-// 				}
-// 				err = json.Unmarshal(data, &orders)
-// 				if err != nil {
-// 					errc <- err
-// 					return
-// 				}
-// 				resc <- orders.Orders
-// 			}(i)
-// 		}
+	data, err := client.Get(BalancesEndpoint+"/"+currency, true)
+	if err != nil {
+		return nil, err
+	}
 
-// 		for i := orders.Meta.CurrentPage + 1; i <= orders.Meta.TotalPages; i++ {
-// 			select {
-// 			case res := <-resc:
-// 				{
-// 					ret = append(ret, res...)
-// 				}
-// 			case err := <-errc:
-// 				{
-// 					return nil, err
-// 				}
-// 			}
-// 		}
-// 	}
+	err = json.Unmarshal(data, &balance)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return ret, nil
-// }
+	return &balance.Balance, nil
+}
