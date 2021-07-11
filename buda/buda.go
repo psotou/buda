@@ -119,7 +119,6 @@ func (client *APIClient) FormatResource(resource string) string {
 
 func (client *APIClient) Get(resource string, private bool) ([]byte, error) {
 	req, err := http.NewRequest("GET", client.FormatResource(resource), nil)
-	// req, err := http.Get(client.FormatResource(resource))
 	if err != nil {
 		return nil, err
 	}

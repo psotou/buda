@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"src/buda-app/buda"
 	"strconv"
@@ -20,7 +21,7 @@ func main() {
 	budaClient, err := buda.NewAPIClient(key, secret)
 
 	if err != nil {
-		panic(err)
+		log.Fatal(err.Error())
 	}
 
 	marketBTC, _ := budaClient.GetTickerByMarket(BTC)
@@ -120,15 +121,15 @@ func main() {
 	fmt.Println("-------------------------------------------------------------------------------------------")
 	fmt.Println("                                       MERCADO BUDA                                       ")
 	fmt.Println("-------------------------------------------------------------------------------------------")
-	fmt.Println("                         BTC                ETH                BCH               LTC")
+	fmt.Printf("%33s %17s %17s %17s\n", "BTC", "ETH", "BCH", "LTC")
 	fmt.Printf("Precio última orden    %10.f CLP    %10.f CLP    %10.f CLP    %10.f CLP\n", lastPriceBTC, lastPriceETH, lastPriceBCH, lastPriceLTC)
 	fmt.Printf("Min precio de venta    %10.f CLP    %10.f CLP    %10.f CLP    %10.f CLP\n", minVentaBTC, minVentaETH, minVentaBCH, minVentaLTC)
 	fmt.Printf("Max precio de compra   %10.f CLP    %10.f CLP    %10.f CLP    %10.f CLP\n", maxCompraBTC, maxCompraETH, maxCompraBCH, maxCompraLTC)
 	fmt.Printf("SPREAD                 %10.f CLP    %10.f CLP    %10.f CLP    %10.f CLP\n", spreadBTC, spreadETH, spreadBCH, spreadLTC)
 	fmt.Printf("Variación 24h          %10.2f %%    %12.2f %%    %12.2f %%    %12.2f %%\n", priceVar24hPerBTC, priceVar24hPerETH, priceVar24hPerBCH, priceVar24hPerLTC)
 	fmt.Printf("Variación 7d           %10.1f %%    %12.1f %%    %12.1f %%    %12.1f %%\n", priceVar7dPerBTC, priceVar7dPerETH, priceVar7dPerBCH, priceVar7dPerLTC)
-	fmt.Printf("Volumen venta 24h      %5.1f (%2.1f %%)    %5.1f (%2.1f %%)    %5.1f (%2.1f %%)    %5.1f (%2.1f %%)\n", volVentaBTC, volVentaPerBTC, volVentaETH, volVentaPerETH, volVentaBCH, volVentaPerBCH, volVentaLTC, volVentaPerLTC)
-	fmt.Printf("Volumen compra 24h     %5.1f (%2.1f %%)    %5.1f (%2.1f %%)    %5.1f (%2.1f %%)    %5.1f (%2.1f %%)\n", volCompraBTC, volCompraPerBTC, volCompraETH, volCompraPerETH, volCompraBCH, volCompraPerBCH, volCompraLTC, volCompraPerLTC)
+	fmt.Printf("Volumen venta 24h      %5.1f (%2.1f %%) %8.1f (%2.1f %%) %8.1f (%2.1f %%) %8.1f (%2.1f %%)\n", volVentaBTC, volVentaPerBTC, volVentaETH, volVentaPerETH, volVentaBCH, volVentaPerBCH, volVentaLTC, volVentaPerLTC)
+	fmt.Printf("Volumen compra 24h     %5.1f (%2.1f %%) %8.1f (%2.1f %%) %8.1f (%2.1f %%) %8.1f (%2.1f %%)\n", volCompraBTC, volCompraPerBTC, volCompraETH, volCompraPerETH, volCompraBCH, volCompraPerBCH, volCompraLTC, volCompraPerLTC)
 	fmt.Println("-------------------------------------------------------------------------------------------")
 
 	balanceBTC, _ := budaClient.GetBalanceByCurrency("BTC")
